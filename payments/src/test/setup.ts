@@ -26,10 +26,11 @@ beforeEach(async () => {
     }
 });
 
-afterAll(async () => {
-    await mongo.stop();
-    await mongoose.connection.close();
-});
+// afterAll(async () => {
+//        jest.setTimeout(100*1000);
+//         await mongo.stop();
+//         await mongoose.connection.close();
+// });
 
 declare global {
     namespace NodeJS {
