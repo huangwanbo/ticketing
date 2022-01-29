@@ -6,7 +6,7 @@ import { natsWrapper } from '../nats-wrapper';
 import { Order } from '../models/orders';
 import { stripe } from '../stripe';
 import { Payment } from '../models/payments';
-
+import { PaymentCreatedPublisher } from '../evnets/publisher/payment-created-publisher';
 const router = express.Router();
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
@@ -50,8 +50,12 @@ router.post('/api/payments',
         });
 
         await payment.save();
-
-        res.status(201).send({ success: true });
+        await new PaymentCreatedPublisher(natsWrapper.client).publish({
+            id: payment.id,
+            orderId: payment.orderId,
+            stripedId: payment.stripeId
+        });
+        res.status(201).send({ id: payment.id });
     }
 );
 

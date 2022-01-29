@@ -96,8 +96,7 @@ it('return a 201 with valid inputs', async () => {
     const payment = await Payment.findOne({
         orderId: order.id,
         stripeId: stripeCharge!.id
-    });
-    
+    });  
     expect(payment).not.toBeNull();
 });
 
