@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client2-depl
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client2
+  template:
+    metadata:
+      labels:
+        app: client2
+    spec:
+      containers:
+        - name: client2
+          image: 416860684/client2
+          env: 
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client2-srv
+spec:
+  selector:
+    app: client2
+  ports:
+    - name: client2
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
